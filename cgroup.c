@@ -33,8 +33,7 @@ static char *find_cgroup_mnt(struct thread_data *td)
 	}
 
 	while ((mnt = getmntent_r(f, &dummy, buf, sizeof(buf))) != NULL) {
-		if (!strcmp(mnt->mnt_type, "cgroup") &&
-		    strstr(mnt->mnt_opts, "blkio"))
+		if (!strcmp(mnt->mnt_type, "cgroup2"))
 			break;
 	}
 
@@ -133,7 +132,7 @@ static int cgroup_write_pid(struct thread_data *td, const char *root)
 {
 	unsigned int val = td->pid;
 
-	return write_int_to_file(td, root, "tasks", val, "cgroup write pid");
+	return write_int_to_file(td, root, "cgroup.procs", val, "cgroup write pid");
 }
 
 /*
